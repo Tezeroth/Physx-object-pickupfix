@@ -1,48 +1,56 @@
-# Hello website!
+# PhysX Object Pickup & Inspection Demo
 
-This is a basic HTML starter project you can build on however you like. No need to save. While you develop your site, your changes will happen ✨ immediately in the preview window. On the left you'll see the files that make up your site, including HTML, JavaScript, and CSS. You can upload assets like images or audio in `assets`. The rest is up to you and your imagination. 🦄
+This project is a web-based 3D interactive environment built with [A-Frame](https://aframe.io/) and the [PhysX](https://github.com/c-frame/physx) physics engine. It demonstrates realistic object pickup, movement, and inspection in a virtual scene, with support for both desktop and mobile controls.
 
-_Last updated: 28 Feb 2023_
+## Features
 
-## What's in this project?
+- **3D Scene with Physics:**
+  - Realistic gravity and collision using PhysX.
+  - Multiple pickupable objects (box, sphere, cylinder, and a GLTF model).
+  - Immersive skybox and textured ground.
+- **Object Pickup & Inspection:**
+  - Click (desktop) or tap (mobile) to pick up objects.
+  - Hold and move objects in front of the camera for inspection.
+  - Only one object can be held at a time.
+- **Physics Handling:**
+  - Physics are temporarily disabled when an object is picked up, then re-enabled when dropped.
+  - Touching objects have their physics temporarily removed and restored to prevent collision glitches.
+- **Camera Controls:**
+  - First-person camera at realistic height (1.6 meters).
+  - Pointer lock (desktop) and gyroscope (mobile) support.
+- **Mobile Support:**
+  - Touch controls and permission handling for device orientation.
+- **Loading Overlay:**
+  - Loading screen while the physics engine initializes for a smooth experience.
 
-← `README.md`: That's this file, where you can tell people what your cool website does and how you built it.
+## How Physics and Camera Issues Were Fixed
 
-← `index.html`: This is the main web page for your site. The HTML defines the structure and content of the page using _elements_. You'll see references in the HTML to the JS and CSS files. Try clicking the image in the center of the page!
+### 1. Objects Falling Through the Floor
+- **Problem:** Objects would sometimes fall through the floor or behave unpredictably when picked up or dropped.
+- **Solution:**
+  - The ground is a thin, wide `<a-box>` with a static PhysX body (`physx-body="type: static; mass: 0;"`), ensuring reliable collision.
+  - When picking up an object, its physics are removed, and after a brief delay, it is set to kinematic mode and attached to the camera. When dropped, physics are re-enabled as a dynamic body, and the object's position/rotation are restored to prevent glitches.
+  - Nearby objects have their physics temporarily removed and restored after a short delay to prevent collision bugs during pickup/drop.
 
-← `style.css`: CSS files add styling rules to your content. The CSS applies styles to the elements in your HTML page. The style rules also make the image move when you click it.
+### 2. Camera Height and Hovering Objects
+- **Problem:** The player camera height was off, or objects appeared to hover above the ground.
+- **Solution:**
+  - The camera is placed at `position="0 1.6 0"`, a standard eye height for VR/first-person scenes.
+  - Held objects are positioned about 2 units in front of the camera and aligned with its rotation, ensuring they appear at a natural height and distance.
+  - When dropped, objects have their position and rotation explicitly set, and physics are reapplied so they settle naturally onto the floor.
 
-← `script.js`: If you're feeling fancy you can add interactivity to your site with JavaScript. The code in the JavaScript file runs when the page loads, and when the visitor clicks the button you can add using the code in the TODO.
+## How to Use
 
-Open each file and check out the comments (in gray) for more info.
+1. Open the site in a modern browser (desktop or mobile).
+2. Wait for the physics engine to load (you'll see a loading overlay).
+3. Use your mouse (desktop) or touch (mobile) to look around and move.
+4. Click/tap on an object to pick it up. Click/tap again to drop it.
+5. Use the controls to inspect objects or move around the scene.
 
-## Try this next 🏗️
+## Technologies Used
+- [A-Frame](https://aframe.io/) for 3D scene and VR/AR support
+- [PhysX](https://github.com/c-frame/physx) for real-time physics
+- JavaScript for custom logic and controls
 
-Take a look in `TODO.md` for next steps you can try out in your new site!
-
-___Want a minimal version of this project to build your own website? Check out [Blank Website](https://glitch.com/edit/#!/remix/glitch-blank-website)!___
-
-## Ready to share your site?
-
-Add these meta tags for SEO and social sharing between your page `<head></head>` tags, changing the values for your site:
-
-```
-<link rel="canonical" href="https://glitch-hello-website.glitch.me/" />
-<meta name="description" content="A simple website, built with Glitch. Remix it to get your own."/>
-<meta name="robots" content="index,follow" />
-<meta property="og:title" content="Hello World!" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://glitch-hello-website.glitch.me/" />
-<meta property="og:description" content="A simple website, built with Glitch. Remix it to get your own."/>
-<meta property="og:image" content="https://cdn.glitch.com/605e2a51-d45f-4d87-a285-9410ad350515%2Fhello-website-social.png?v=1616712748147"/>
-<meta name="twitter:card" content="summary" />
-```
-
-![Glitch](https://cdn.glitch.com/a9975ea6-8949-4bab-addb-8a95021dc2da%2FLogo_Color.svg?v=1602781328576)
-
-## You built this with Glitch!
-
-[Glitch](https://glitch.com) is a friendly community where millions of people come together to build web apps and websites.
-
-- Need more help? [Check out our Help Center](https://help.glitch.com/) for answers to any common questions.
-- Ready to make it official? [Become a paid Glitch member](https://glitch.com/pricing) to boost your app with private sharing, more storage and memory, domains and more.
+## License
+MIT License. See LICENSE file for details.
